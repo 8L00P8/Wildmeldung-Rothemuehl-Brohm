@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#2f5d3a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Wildmeldung">
+<title>Wildmeldung</title>
+<style>
+:root{--bg:#ece4cf;--card:#fbf7ea;--ink:#2a2317;--mut:#6a5d45;--line:#cbbd9a;--acc:#2c4632;--acc2:#e1e3cb;--warn:#8a3b1c;--warnbg:#f6e3cf;--bad:#8a2a22;--brass:#b08d3e;--serif:"Palatino Linotype","Book Antiqua",Palatino,Georgia,serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-text-size-adjust:100%}
+header{background:var(--acc);color:#fff;padding:14px 16px}
+header h1{margin:0;font-size:21px}header div{font-size:16px;opacity:.95}
+main{padding:14px 16px 40px;max-width:640px;margin:0 auto}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:16px}
+h2{margin:0 0 4px;font-size:19px}
+label.f{display:block;font-weight:600;margin:16px 0 6px}
+input,select{font:inherit;font-size:18px;padding:12px;border:2px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);width:100%}
+.two{display:flex;gap:12px}.two>div{flex:1;min-width:0}
+.pick{display:flex;flex-wrap:wrap;gap:8px}
+.pick button{font:inherit;padding:12px 14px;border:2px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);flex:1 1 auto}
+.pick button.on{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:600}
+.pick .grp{width:100%;font-size:15px;color:var(--mut);margin-top:4px}
+.btn{display:block;width:100%;font:inherit;font-weight:600;padding:15px;border-radius:10px;border:2px solid var(--acc);background:var(--acc);color:#fff;margin-top:16px}
+.btn.sec{background:#fff;color:var(--acc)}.btn.s{padding:9px;font-size:16px;margin-top:8px}
+.it{display:flex;gap:10px;align-items:center;border-top:1px solid var(--line);padding:10px 0}
+.it:first-of-type{border-top:none}.it span{flex:1}
+.it button{font:inherit;border:2px solid var(--bad);color:var(--bad);background:#fff;border-radius:8px;padding:6px 12px}
+.mut{color:var(--mut);font-size:16px}
+#toast{position:fixed;left:16px;right:16px;bottom:20px;background:var(--ink);color:#fff;padding:14px;border-radius:10px;font-weight:600;text-align:center;display:none}
+
+body{background:var(--bg) radial-gradient(circle at 20% 0,#f3ecd9 0,transparent 60%) fixed}
+header{background:linear-gradient(#34523b,#263d2b);border-bottom:4px solid var(--brass);box-shadow:0 2px 0 #1b2b1f}
+header h1{font-family:var(--serif);font-variant:small-caps;letter-spacing:.06em;font-weight:700}
+.emb{width:46px;height:36px;vertical-align:-8px;margin-right:10px}
+h2,h3{font-family:var(--serif);color:var(--acc)}
+h2{border-bottom:1px solid var(--line);padding-bottom:8px;margin-bottom:12px}
+.card{box-shadow:0 0 0 4px var(--card),0 0 0 5px var(--line),0 3px 10px 4px rgba(60,45,20,.10);border-color:var(--line);margin:6px 6px 26px}
+.btn{font-family:var(--serif);letter-spacing:.03em;border-color:#1f3324;box-shadow:inset 0 0 0 1px var(--brass)}
+.btn.sec,.btn.del{box-shadow:none;background:var(--card)}
+.pick button{background:var(--card)}
+.pick button.on{box-shadow:inset 0 0 0 1px var(--brass)}
+input,select,textarea{background:#fffdf6}
+input:focus,select:focus,textarea:focus,button:focus-visible{outline:3px solid var(--brass)}
+
+header div{font-family:var(--serif);font-style:italic}
+.card{margin:4px 4px 22px}
+</style>
+</head>
+<body>
+<header><h1><svg class="emb" viewBox="0 0 64 50" aria-hidden="true"><g fill="none" stroke="#c9a655" stroke-width="3" stroke-linecap="round"><g id="gw"><path d="M35 47C36 36 46 30 54 7"/><path d="M36 41c5 0 9-1 12-5"/><path d="M41 33c6 0 11-3 15-9"/><path d="M47 23c5-1 9-5 11-11"/></g><use href="#gw" transform="matrix(-1 0 0 1 64 0)"/></g><circle cx="32" cy="47" r="2.5" fill="#c9a655"/></svg>Wildmeldung</h1><div id="hRev"></div></header>
+<main>
+<div class="card" id="cRev" style="display:none"><h2>Für welches Revier meldest du?</h2><input id="iRev" style="margin-top:10px" placeholder="Name des Reviers"></div>
+<div class="card">
+<h2>Stück eintragen</h2>
+<label class="f" for="fMelder">Dein Name</label><input id="fMelder" autocomplete="name">
+<label class="f" for="fDatum">Datum</label><input type="date" id="fDatum">
+<label class="f">Wildart</label><div class="pick" id="pArt"></div>
+<label class="f">Altersklasse</label><div class="pick" id="pKlasse"></div>
+<label class="f">Erlegt oder Fallwild?</label><div class="pick" id="pTyp"></div>
+<div class="two">
+<div><label class="f" for="fStueck">Anzahl Stück</label><input type="number" id="fStueck" inputmode="numeric" min="1" value="1"></div>
+<div><label class="f" for="fGewicht">Gewicht kg</label><input type="number" id="fGewicht" inputmode="decimal" min="0" step="0.5"></div>
+</div>
+<p class="mut" style="margin:6px 0 0">Bei mehreren Stücken das Gewicht zusammen.</p>
+<label class="f" for="fBem">Bemerkung (freiwillig)</label><input id="fBem">
+<button class="btn sec" id="bAdd">Zur Meldung hinzufügen</button>
+</div>
+<div class="card" id="cOffen"><h2>Noch nicht gesendet</h2><div id="lOffen"></div>
+<div id="sendBtns"></div><button class="btn sec s" id="bCopy">Meldetext nur kopieren</button></div>
+<div class="card" id="cSent" style="display:none"><h2>Bereits gesendet</h2><div id="lSent"></div></div>
+</main>
+<div id="toast"></div>
+<script>
+const REVIERE=[];
+const ARTEN=[
+ {name:'Rotwild',w:3,klassen:['Wildkalb','Schmaltier','Alttier','Hirschkalb','Schmalspießer','junger Hirsch','mittelalter Hirsch','alter Hirsch']},
+ {name:'Damwild',w:3,klassen:['Wildkalb','Schmaltier','Alttier','Hirschkalb','Schmalspießer','junger Hirsch','mittelalter Hirsch','alter Hirsch']},
+ {name:'Schwarzwild',w:3,klassen:['Frischlingsbache','Überläuferbache','Bache','Frischlingskeiler','Überläuferkeiler','Keiler 2–4 Jahre','Keiler ab 5 Jahre']}];
+const TYPEN=['Erlegt','Fallwild – Verkehr','Fallwild – sonstiges'];
+const KEY='wildmeldebogen.v1';
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+const dDE=s=>s.slice(6)+'.'+s.slice(4,6)+'.'+s.slice(0,4);
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+function toast(t){const e=$('toast');e.textContent=t;e.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.display='none',3500)}
+
+let S={r:'',an:'',mail:'',melder:'',offen:[],sent:[]},sel={art:0,klasse:null,typ:0};
+try{const raw=localStorage.getItem(KEY);if(raw)S=Object.assign(S,JSON.parse(raw))}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}render()};
+// Revier und Empfänger kommen aus dem Link: #r=Reviername&an=E-Mail-oder-Handynummer
+const hp=new URLSearchParams(location.hash.slice(1));
+const linkRev=!!hp.get('r');
+if(hp.get('r'))S.r=hp.get('r').trim().slice(0,80);
+if(hp.get('an'))S.an=hp.get('an').trim().slice(0,120);
+if(hp.get('m'))S.mail=hp.get('m').trim().slice(0,120);
+
+function picks(){
+  $('pArt').innerHTML=ARTEN.map((a,i)=>`<button type="button" data-k="${i}" class="${sel.art===i?'on':''}">${a.name}</button>`).join('');
+  const a=ARTEN[sel.art];
+  $('pKlasse').innerHTML='<div class="grp">weiblich</div>'+a.klassen.map((n,i)=>(i===a.w?'<div class="grp">männlich</div>':'')+`<button type="button" data-k="${i}" class="${sel.klasse===i?'on':''}">${n}</button>`).join('');
+  $('pTyp').innerHTML=TYPEN.map((n,i)=>`<button type="button" data-k="${i}" class="${sel.typ===i?'on':''}">${n}</button>`).join('');
+}
+const pk=e=>{const b=e.target.closest('button');return b?+b.dataset.k:null};
+$('pArt').onclick=e=>{const k=pk(e);if(k!==null){sel.art=k;sel.klasse=null;picks()}};
+$('pKlasse').onclick=e=>{const k=pk(e);if(k!==null){sel.klasse=k;picks()}};
+$('pTyp').onclick=e=>{const k=pk(e);if(k!==null){sel.typ=k;picks()}};
+
+// Eintrag: [id, JJJJMMTT, Wildart, Klasse, Typ, Stück, kg, Bemerkung]
+const line=e=>`${dDE(e[1])}: ${e[5]} × ${ARTEN[e[2]].name} ${ARTEN[e[2]].klassen[e[3]]}, ${TYPEN[e[4]]}${e[6]?', '+String(e[6]).replace('.',',')+' kg':''}${e[7]?' ('+e[7]+')':''}`;
+function buildText(list){
+  const json=JSON.stringify({v:1,r:S.r,m:S.melder,e:list});
+  const b64=btoa(String.fromCharCode(...new TextEncoder().encode(json)));
+  return `Wildmeldung ${S.r}\nGemeldet von: ${S.melder}\n\n${list.map(line).join('\n')}\n\nCode für die Wildbestandsliste, bitte nicht ändern:\nWILDMELDUNG:${b64}:ENDE`;
+}
+$('bAdd').onclick=()=>{
+  S.melder=$('fMelder').value.trim();const d=$('fDatum').value,st=parseInt($('fStueck').value,10);
+  if(!S.r)return toast('Bitte oben das Revier auswählen.');
+  if(!S.melder)return toast('Bitte deinen Namen eintragen.');
+  if(!d)return toast('Bitte das Datum eintragen.');
+  if(sel.klasse===null)return toast('Bitte die Altersklasse antippen.');
+  if(!(st>=1))return toast('Bitte die Anzahl Stück eintragen.');
+  S.offen.push([uid(),d.replace(/-/g,''),sel.art,sel.klasse,sel.typ,st,parseFloat($('fGewicht').value)||0,$('fBem').value.trim().slice(0,200)]);
+  sel.klasse=null;sel.typ=0;$('fStueck').value=1;$('fGewicht').value='';$('fBem').value='';picks();save();
+  toast('Hinzugefügt. Unten auf „Senden" tippen.');
+};
+async function copy(t){try{await navigator.clipboard.writeText(t)}catch(e){const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove()}}
+// Versandwege: WhatsApp und/oder E-Mail, je nachdem was im Link steht
+const waNr=()=>S.an.includes('@')?'':S.an.replace(/\D/g,'');
+const mailAdr=()=>S.mail||(S.an.includes('@')?S.an:'');
+function ways(){const w=[];if(waNr().length>=7)w.push(['wa','Per WhatsApp senden']);if(mailAdr())w.push(['mail','Per E-Mail senden']);if(!w.length)w.push(['share','Meldung senden']);return w}
+async function send(list,via){
+  S.melder=$('fMelder').value.trim()||S.melder;
+  const t=buildText(list),enc=encodeURIComponent;
+  if(via==='mail')location.href='mailto:'+mailAdr()+'?subject='+enc('Wildmeldung '+S.r)+'&body='+enc(t);
+  else if(via==='wa'){
+    // Erst die WhatsApp-App direkt öffnen; nur wenn das Handy die Seite nicht verlässt, die Internet-Adresse als Ersatz nehmen
+    const d=waNr(),app='whatsapp://send?phone='+d+'&text='+enc(t),web='https://api.whatsapp.com/send?phone='+d+'&text='+enc(t);
+    let weg=false;const vis=()=>{if(document.hidden)weg=true};document.addEventListener('visibilitychange',vis);window.addEventListener('pagehide',vis);
+    location.href=app;
+    setTimeout(()=>{document.removeEventListener('visibilitychange',vis);if(!weg&&!document.hidden)location.href=web},1800);
+  }
+  else if(navigator.share){try{await navigator.share({title:'Wildmeldung '+S.r,text:t})}catch(e){return false}}
+  else{await copy(t);toast('Meldetext kopiert. Jetzt in WhatsApp oder E-Mail einfügen.')}
+  return true;
+}
+$('sendBtns').onclick=async e=>{const v=e.target.closest('button')?.dataset.v;if(!v||!S.offen.length)return;if(await send(S.offen,v)){S.sent.unshift({t:Date.now(),e:S.offen});S.sent=S.sent.slice(0,15);S.offen=[];save()}};
+$('bCopy').onclick=async()=>{if(S.offen.length){await copy(buildText(S.offen));toast('Meldetext kopiert.')}};
+function delOffen(i){S.offen.splice(i,1);save()}
+function resend(i){send(S.sent[i].e,ways()[0][0])}
+$('iRev').onchange=()=>{S.r=$('iRev').value.trim().slice(0,80);save()};
+
+function render(){
+  $('hRev').textContent=S.r||'';
+  $('cRev').style.display=linkRev?'none':'';
+  if(document.activeElement!==$('iRev'))$('iRev').value=S.r;
+  $('cOffen').style.display=S.offen.length?'':'none';
+  $('lOffen').innerHTML=S.offen.map((e,i)=>`<div class="it"><span>${esc(line(e))}</span><button onclick="delOffen(${i})" aria-label="Entfernen">✕</button></div>`).join('');
+  $('sendBtns').innerHTML=ways().map(([v,l],i)=>`<button class="btn${i?' sec':''}" data-v="${v}">${l} (${S.offen.length})</button>`).join('');
+  $('cSent').style.display=S.sent.length?'':'none';
+  $('lSent').innerHTML=S.sent.map((s,i)=>`<div class="it" style="display:block"><div class="mut">Gesendet am ${new Date(s.t).toLocaleDateString('de-DE')}</div>${s.e.map(e=>'<div>'+esc(line(e))+'</div>').join('')}<button class="btn sec s" style="border-color:var(--acc);color:var(--acc);width:100%" onclick="resend(${i})">Nochmal senden</button></div>`).join('');
+}
+$('fMelder').value=S.melder;$('fDatum').value=today();picks();save();
+</script>
+</body>
+</html>
